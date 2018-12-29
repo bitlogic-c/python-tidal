@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import re
 import datetime
@@ -28,7 +28,7 @@ from collections import Iterable
 from .models import UserInfo, Subscription, SubscriptionType, Quality
 from .models import Artist, Album, Track, Video, Playlist, BrowsableMedia, PlayableMedia, Promotion, SearchResult, Category
 try:
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 except ImportError:
     from urllib.parse import urljoin
 
@@ -301,7 +301,7 @@ class Session(object):
         return [self._parse_promotion(item) for item in items if item['type'] in types]
 
     def get_category_items(self, group):
-        items = map(self._parse_category, self.request('GET', group).json())
+        items = list(map(self._parse_category, self.request('GET', group).json()))
         for item in items:
             item._group = group
         return items
@@ -434,7 +434,7 @@ class Session(object):
             'query': value,
             'limit': limit,
         }
-        if isinstance(field, basestring):
+        if isinstance(field, str):
             what = field.upper()
             params.update({'types': what if what == 'ALL' or what.endswith('S') else what + 'S'})
         elif isinstance(field, Iterable):
@@ -488,7 +488,7 @@ class Session(object):
         for item in json_obj:
             nextArtist = self._parse_artist(item)
             allArtists.append(nextArtist)
-            if nextArtist.id <> artist_id:
+            if nextArtist.id != artist_id:
                 ftArtists.append(nextArtist)
         return (allArtists, ftArtists)
 
@@ -616,12 +616,12 @@ class Favorites(object):
         return self.ids
 
     def get(self, content_type, limit=9999):
-        items = self._session._map_request(self._base_url + '/%s' % content_type, params={'limit': limit if content_type <> 'videos' else min(limit, 100)}, ret=content_type)
+        items = self._session._map_request(self._base_url + '/%s' % content_type, params={'limit': limit if content_type != 'videos' else min(limit, 100)}, ret=content_type)
         self.ids[content_type] = ['%s' % item.id for item in items]
         return items
 
     def add(self, content_type, item_ids):
-        if isinstance(item_ids, basestring):
+        if isinstance(item_ids, str):
             ids = [item_ids]
         else:
             ids = item_ids

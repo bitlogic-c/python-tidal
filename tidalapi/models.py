@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
+
 
 import re
 import datetime
@@ -63,6 +63,7 @@ class Model(object):
         return None
 
 
+
 class BrowsableMedia(Model):
 
     # Internal Properties
@@ -78,6 +79,7 @@ class BrowsableMedia(Model):
     @property
     def fanart(self):
         return None
+
 
 
 class Album(BrowsableMedia):
@@ -131,6 +133,9 @@ class Album(BrowsableMedia):
             return IMG_URL.format(picture=self.cover.replace('-', '/'), size='1280x1280')
         return None
 
+    def __str__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.title)
+
 
 class Artist(BrowsableMedia):
     picture = None
@@ -151,6 +156,9 @@ class Artist(BrowsableMedia):
         if self.picture:
             return IMG_URL.format(picture=self.picture.replace('-', '/'), size='1080x720')
         return ARTIST_IMAGE_URL.format(width=1080, height=720, artistid=self.id)
+
+    def __str__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.title)
 
 
 class Playlist(BrowsableMedia):
@@ -212,6 +220,10 @@ class Playlist(BrowsableMedia):
             return IMG_URL.format(picture=self._image.replace('-', '/'), size='1080x720')
         return None
 
+    def __str__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.title)
+
+
 
 class PlayableMedia(BrowsableMedia):
     # Common Properties for Tacks and Videos
@@ -247,6 +259,10 @@ class PlayableMedia(BrowsableMedia):
     @property
     def available(self):
         return self.streamReady and self.allowStreaming
+
+    def __str__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.title)
+
 
 
 class Track(PlayableMedia):
