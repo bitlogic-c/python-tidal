@@ -430,10 +430,20 @@ class Session(object):
         return r.json().get('url', None)
 
     def search(self, field, value, limit=50):
+        """
+
+
+        :param field:  possible values: all, artist, album, track, playlist
+        :param value:
+        :param limit:
+        :return:
+        """
         params = {
             'query': value,
             'limit': limit,
         }
+
+        field =  [ 'ARTISTS', 'ALBUMS', 'PLAYLISTS', 'TRACKS' ] if field.upper() == 'ALL' else field
         if isinstance(field, str):
             what = field.upper()
             params.update({'types': what if what == 'ALL' or what.endswith('S') else what + 'S'})

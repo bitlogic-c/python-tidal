@@ -80,6 +80,9 @@ class BrowsableMedia(Model):
     def fanart(self):
         return None
 
+    def __repr__(self):
+        return self.__str__()
+
 
 
 class Album(BrowsableMedia):
@@ -137,6 +140,7 @@ class Album(BrowsableMedia):
         return '{}: {}'.format(self.__class__.__name__, self.title)
 
 
+
 class Artist(BrowsableMedia):
     picture = None
     url = None
@@ -158,7 +162,7 @@ class Artist(BrowsableMedia):
         return ARTIST_IMAGE_URL.format(width=1080, height=720, artistid=self.id)
 
     def __str__(self):
-        return '{}: {}'.format(self.__class__.__name__, self.title)
+        return '{}: {}'.format(self.__class__.__name__, self.name)
 
 
 class Playlist(BrowsableMedia):
@@ -223,6 +227,8 @@ class Playlist(BrowsableMedia):
     def __str__(self):
         return '{}: {}'.format(self.__class__.__name__, self.title)
 
+    def __repr__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.title)
 
 
 class PlayableMedia(BrowsableMedia):
